@@ -1,0 +1,39 @@
+Parameters:
+  Stage:
+    Type: String
+    Description: "Specifies the stage to deploy the CloudFormation stack in, e.g. Beta, Prod."
+Resources:
+  UserServicePrincipal:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: "UserServicePrincipal"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TableCourses:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "Courses"
+      AttributeDefinitions:
+        -
+          AttributeName: "CourseId"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "CourseId"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+  UserPoolSocialLoginEnabledPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: "SocialLoginEnabledPool"
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      UsernameAttributes:
+        - "email"
+      AutoVerifiedAttributes:
+        - "email"
+      # TODO: EmailConfiguration
+      EmailVerificationSubject: "请验证您的Discipleship帐号"
+      EmailVerificationMessage: "请验证您的Discipleship帐号: {####}"
