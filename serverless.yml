@@ -36,23 +36,19 @@ provider:
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-          path: hello
-          method: get
-  # Defines an HTTP API endpoint that calls the main function in create.js
-  # - path: url path is /notes
-  # - method: POST request
-  # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
-  #     domain api call
-  # - authorizer: authenticate using the AWS IAM role
   create_course:
     handler: create_course.main
     events:
       - http:
-          path: courses
-          method: post
-          cors: true
-          authorizer: aws_iam
+        path: courses
+        method: post
+        cors: true
+        authorizer: aws_iam
+  get_course:
+    handler: get_course.main
+    events:
+      - http:
+        path: courses/{id}
+        method: get
+        cors: true
+        authorizer: aws_iam
