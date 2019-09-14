@@ -12,3 +12,10 @@ See [here](https://github.com/AnomalyInnovations/serverless-nodejs-starter/blob/
 * Deploy CloudFormation Stack
   * Execute command: `python3 deploy_cf_stack.py Beta`
 * Ask Drew for instructions on how to monitor the CloudFormation deployment progress and the necessary credentials.
+
+### Run Locally
+* Install dependencies
+  * Execute command: `npm install`
+* Run tests locally
+  * Test specific function:
+    * Example command: `AWS_PROFILE=Discipleship serverless invoke local --function create_course --path fixtures/create_course.json`

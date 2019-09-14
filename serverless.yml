@@ -1,7 +1,7 @@
 # NOTE: update this with your service name
 service: discipleship-app-api
 
-# Create an optimized package for our functions 
+# Create an optimized package for our functions
 package:
   individually: true
 
@@ -12,7 +12,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs8.10
-  stage: dev
+  stage: prod
   region: us-east-1
   # To load environment variables externally
   # rename env.example to env.yml and uncomment
@@ -21,6 +21,20 @@ provider:
   #
   #environment: ${file(env.yml):${self:provider.stage}}
 
+  # 'iamRoleStatements' defines the permission policy for the Lambda function.
+  # In this case Lambda functions are granted with permissions to access DynamoDB.
+  lambdaPolicies:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
 functions:
   hello:
     handler: handler.hello
@@ -28,3 +42,17 @@ functions:
       - http:
           path: hello
           method: get
+  # Defines an HTTP API endpoint that calls the main function in create.js
+  # - path: url path is /notes
+  # - method: POST request
+  # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
+  #     domain api call
+  # - authorizer: authenticate using the AWS IAM role
+  create_course:
+    handler: create_course.main
+    events:
+      - http:
+          path: courses
+          method: post
+          cors: true
+          authorizer: aws_iam
