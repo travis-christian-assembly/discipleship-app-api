@@ -37,7 +37,7 @@ provider:
 
 functions:
   put_course:
-    handler: put_course.main
+    handler: src/api/put_course.main
     events:
       - http:
         path: courses
@@ -45,7 +45,7 @@ functions:
         cors: true
         authorizer: aws_iam
   get_course:
-    handler: get_course.main
+    handler: src/api/get_course.main
     events:
       - http:
         path: courses/{id}
@@ -53,7 +53,7 @@ functions:
         cors: true
         authorizer: aws_iam
   list_courses:
-    handler: list_courses.main
+    handler: src/api/list_courses.main
     events:
       - http:
         path: courses

@@ -1,5 +1,5 @@
-import * as dynamoDb from "./lib/dynamodb";
-import { success, notFoundError, failure } from "./lib/response";
+import * as documents from "../dal/documents";
+import { success, notFoundError, failure } from "../util/response";
 
 export async function main(event, context) {
   const params = {
@@ -10,7 +10,7 @@ export async function main(event, context) {
   };
 
   try {
-    const result = await dynamoDb.call("get", params);
+    const result = await documents.call("get", params);
     if (result.Item) {
       return success(result.Item);
     } else {

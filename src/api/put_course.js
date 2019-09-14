@@ -1,6 +1,6 @@
 import uuid from "uuid";
-import * as dynamoDb from "./lib/dynamodb";
-import { success, failure } from "./lib/response";
+import * as documents from "../dal/documents";
+import { success, failure } from "../util/response";
 
 export async function main(event, context, callback) {
   const data = JSON.parse(event.body);
@@ -16,7 +16,7 @@ export async function main(event, context, callback) {
   };
 
   try {
-    await dynamoDb.call("put", params);
+    await documents.call("put", params);
     return success(params.Item);
   } catch (e) {
     console.log(e);
