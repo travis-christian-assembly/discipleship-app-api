@@ -13,7 +13,7 @@ elif input[1] not in valid_stages:
 
 print(f"Provisioning CloudFormation stack for stage {input[1]}")
 
-exit_code = os.system(f"aws cloudformation update-stack --profile Discipleship --stack-name Discipleship --parameters ParameterKey=Stage,ParameterValue={input[1]} --template-body file://discipleship.yml --capabilities CAPABILITY_NAMED_IAM")
+exit_code = os.system(f"aws cloudformation update-stack --profile Discipleship --stack-name Discipleship --parameters ParameterKey=Stage,ParameterValue={input[1]} --template-body file://cloud_formation/discipleship.yml --capabilities CAPABILITY_NAMED_IAM")
 
 if exit_code != 0:
     print("CloudFormation provisioning encountered an unexpected error.")

@@ -18,4 +18,7 @@ See [here](https://github.com/AnomalyInnovations/serverless-nodejs-starter/blob/
   * Execute command: `npm install`
 * Run tests locally
   * Test specific function:
-    * Example command: `AWS_PROFILE=Discipleship serverless invoke local --function create_course --path fixtures/create_course.json`
+    * Example command:
+      * `AWS_PROFILE=Discipleship serverless invoke local --function put_course --path fixtures/put_course.json`
+      * `AWS_PROFILE=Discipleship serverless invoke local --function get_course --path fixtures/get_course.json`
+      * ``

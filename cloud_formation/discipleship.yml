@@ -17,6 +17,9 @@ Resources:
         -
           AttributeName: "CourseId"
           AttributeType: "S"
+        -
+          AttributeName: "CreatedBy"
+          AttributeType: "S"
       KeySchema:
         -
           AttributeName: "CourseId"
@@ -24,6 +27,15 @@ Resources:
       BillingMode: "PAY_PER_REQUEST"
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
+      GlobalSecondaryIndexes:
+        -
+          IndexName: "ByCreators"
+          KeySchema:
+            -
+              AttributeName: "CreatedBy"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "ALL"
   UserPoolSocialLoginEnabledPool:
     Type: AWS::Cognito::UserPool
     Properties:

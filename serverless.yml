@@ -36,8 +36,8 @@ provider:
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
-  create_course:
-    handler: create_course.main
+  put_course:
+    handler: put_course.main
     events:
       - http:
         path: courses
@@ -49,6 +49,14 @@ functions:
     events:
       - http:
         path: courses/{id}
+        method: get
+        cors: true
+        authorizer: aws_iam
+  list_courses:
+    handler: list_courses.main
+    events:
+      - http:
+        path: courses
         method: get
         cors: true
         authorizer: aws_iam
