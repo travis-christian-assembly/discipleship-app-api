@@ -1,0 +1,10 @@
+{
+  "pathParameters": {
+    "courseId": "dfdefda0-d71c-11e9-8dbf-3196830b1685"
+  },
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "USER-SUB-1234"
+    }
+  }
+}

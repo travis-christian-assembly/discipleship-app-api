@@ -19,6 +19,7 @@ See [here](https://github.com/AnomalyInnovations/serverless-nodejs-starter/blob/
 * Run tests locally
   * Test specific function:
     * Example command:
-      * `AWS_PROFILE=Discipleship serverless invoke local --function put_course --path fixtures/put_course.json`
-      * `AWS_PROFILE=Discipleship serverless invoke local --function get_course --path fixtures/get_course.json`
-      * ``
+      * `AWS_PROFILE=Discipleship serverless invoke local --function put_course --path tst/fixtures/put_course.json`
+      * `AWS_PROFILE=Discipleship serverless invoke local --function get_course --path tst/fixtures/get_course.json`
+      * `AWS_PROFILE=Discipleship serverless invoke local --function list_courses --path tst/fixtures/list_courses.json`
+      * `AWS_PROFILE=Discipleship serverless invoke local --function delete_course --path tst/fixtures/delete_course.json`
