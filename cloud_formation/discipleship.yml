@@ -1,7 +1,3 @@
-Parameters:
-  Stage:
-    Type: String
-    Description: "Specifies the stage to deploy the CloudFormation stack in, e.g. Beta, Prod."
 Resources:
   UserServicePrincipal:
     Type: AWS::IAM::User
@@ -9,6 +5,37 @@ Resources:
       UserName: "UserServicePrincipal"
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/AdministratorAccess"
+  RoleServicePrincipal:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "RoleServicePrincipal"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Federated: "cognito-identity.amazonaws.com"
+            Action: "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals:
+                cognito-identity.amazonaws.com:aud: !Ref IdentityPoolFederatedServicePrincipalPool
+              ForAnyValue:StringLike:
+                cognito-identity.amazonaws.com:amr: "authenticated"
+      Policies:
+        -
+          PolicyName: "ServicePrincipalPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "cognito-sync:*"
+                  - "cognito-identity:*"
+                  - "execute-api:Invoke"
+                  - "mobileanalytics:PutEvents"
+                Resource: "*"
   TableCourses:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -36,10 +63,10 @@ Resources:
               KeyType: "HASH"
           Projection:
             ProjectionType: "ALL"
-  UserPoolSocialLoginEnabledPool:
+  UserPoolSocialLoginEnabledEndUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: "SocialLoginEnabledPool"
+      UserPoolName: "SocialLoginEnabledEndUserPool"
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: false
       UsernameAttributes:
@@ -49,3 +76,38 @@ Resources:
       # TODO: EmailConfiguration
       EmailVerificationSubject: "请验证您的Discipleship帐号"
       EmailVerificationMessage: "请验证您的Discipleship帐号: {####}"
+  UserPoolClientSocialLoginEnabledEndUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: "SocialLoginEnabledEndUserPoolClient"
+      GenerateSecret: false
+      UserPoolId: !Ref UserPoolSocialLoginEnabledEndUserPool
+  IdentityPoolFederatedServicePrincipalPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      IdentityPoolName: "FederatedServicePrincipalPool"
+      AllowUnauthenticatedIdentities: false
+      CognitoIdentityProviders:
+        - ClientId: !Ref UserPoolClientSocialLoginEnabledEndUserPoolClient
+          ProviderName: !GetAtt UserPoolSocialLoginEnabledEndUserPool.ProviderName
+  IdentityPoolRoleAttachment:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: !Ref IdentityPoolFederatedServicePrincipalPool
+      Roles: { "authenticated": !GetAtt RoleServicePrincipal.Arn }
+  GatewayResponseDefault4XX:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+         gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+         gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+      ResponseType: DEFAULT_4XX
+      RestApiId: !Ref ApiGatewayRestApi
+  GatewayResponseDefault5XX:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+         gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+         gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+      ResponseType: DEFAULT_5XX
+      RestApiId: !Ref ApiGatewayRestApi

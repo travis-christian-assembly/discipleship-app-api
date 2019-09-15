@@ -1,7 +1,10 @@
 import * as documents from "../dal/documents";
+import { logRequest } from "../util/request";
 import { success, notFoundError, failure } from "../util/response";
 
 export async function main(event, context) {
+  logRequest(event);
+
   const params = {
     TableName: "Courses",
     Key: {

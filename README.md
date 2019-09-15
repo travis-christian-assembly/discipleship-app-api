@@ -4,22 +4,25 @@ See [here](https://github.com/AnomalyInnovations/serverless-nodejs-starter/blob/
 ## Development Environment Setup
 ### AWS CLI Setup
 * Install AWS CLI
-  * ***[Preferred]*** Option 1 (via Homebrew, only available on macOS): `brew install awscli`
-  * Option 2 (via Pip, available on Linux, Unix and macOS): `sudo pip install awscli`
+  * ***[Preferred]*** Option 1 (via `Homebrew`): `brew install awscli`
+  * Option 2 (via Pip): `sudo pip install awscli`
 * Ask Drew for instructions on how to configure the AWS CLI.
 
 ### Deploy Infrastructure
-* Deploy CloudFormation Stack
-  * Execute command: `python3 deploy_cf_stack.py Beta`
-* Ask Drew for instructions on how to monitor the CloudFormation deployment progress and the necessary credentials.
+* Deploy to Beta
+  * Execute command: `serverless deploy --stage beta`
 
 ### Run Locally
 * Install dependencies
   * Execute command: `npm install`
 * Run tests locally
-  * Test specific function:
-    * Example command:
-      * `AWS_PROFILE=Discipleship serverless invoke local --function put_course --path tst/fixtures/put_course.json`
-      * `AWS_PROFILE=Discipleship serverless invoke local --function get_course --path tst/fixtures/get_course.json`
-      * `AWS_PROFILE=Discipleship serverless invoke local --function list_courses --path tst/fixtures/list_courses.json`
-      * `AWS_PROFILE=Discipleship serverless invoke local --function delete_course --path tst/fixtures/delete_course.json`
+  * Test specific local function:
+    * Example commands:
+      * `AWS_PROFILE=Discipleship serverless invoke local --stage beta --function putCourse --path tst/fixtures/put_course.json`
+      * `AWS_PROFILE=Discipleship serverless invoke local --stage beta --function getCourse --path tst/fixtures/get_course.json`
+      * `AWS_PROFILE=Discipleship serverless invoke local --stage beta --function listCourses --path tst/fixtures/list_courses.json`
+      * `AWS_PROFILE=Discipleship serverless invoke local --stage beta --function deleteCourse --path tst/fixtures/delete_course.json`
+  * Test specific remote API in Beta:
+    * Globally install `AWS API Gateway Test CLI`: `npm install -g aws-api-gateway-cli-test`
+    * Example commands:
+      * `apig-test --username='USER_NAME' --password='PASSWORD' --user-pool-id='USER_POOL_ID' --app-client-id='APP_CLIENT_ID' --cognito-region='REGION' --identity-pool-id='IDENTITY_POOL_ID' --invoke-url='API_GATEWAY_URL' --api-gateway-region='REGION' --path-template='API_GATEWAY_PATH' --method='HTTP_METHOD' --body='REQUEST_BODY_JSON'`
