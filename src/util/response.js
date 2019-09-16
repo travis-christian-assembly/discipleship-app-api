@@ -2,6 +2,10 @@ export function success(body) {
   return buildResponse(200, body);
 }
 
+export function badRequest(body) {
+  return buildResponse(400, body);
+}
+
 export function notFoundError(body) {
   return buildResponse(404, body);
 }

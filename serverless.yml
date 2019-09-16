@@ -43,7 +43,7 @@ functions:
     events:
       - http:
           path: courses/{courseId}
-          method: post
+          method: put
           cors: true
           authorizer: aws_iam
   getCourse:
