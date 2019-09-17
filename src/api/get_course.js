@@ -17,7 +17,7 @@ export async function main(event, context) {
     if (result.Item) {
       return success(result.Item);
     } else {
-      return notFoundError({ status: false, error: "Item not found." });
+      return notFoundError({ status: false, error: "Course not found." });
     }
   } catch (e) {
     console.log(e);

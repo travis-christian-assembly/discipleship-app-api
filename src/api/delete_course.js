@@ -10,9 +10,10 @@ export async function main(event, context) {
     Key: {
       CourseId: event.pathParameters.courseId
     },
-    ConditionExpression:"CourseId = :courseId",
+    ConditionExpression:"CourseId = :courseId AND CreatedBy = :created_by",
     ExpressionAttributeValues: {
-      ":courseId": event.pathParameters.courseId
+      ":courseId": event.pathParameters.courseId,
+      ":created_by": event.requestContext.identity.cognitoIdentityId
     }
   };
 
@@ -21,8 +22,9 @@ export async function main(event, context) {
     return success(result.Item);
   } catch (e) {
     if (e.code == "ConditionalCheckFailedException") {
-      return notFoundError({ status: false, error: "Item not found." });
+      return notFoundError({ status: false, error: "Course not found." });
     } else {
+      console.log(e);
       return failure({ status: false });
     }
   }

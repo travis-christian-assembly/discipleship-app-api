@@ -8,7 +8,12 @@ See [here](https://github.com/AnomalyInnovations/serverless-nodejs-starter/blob/
   * Option 2 (via Pip): `sudo pip install awscli`
 * Ask Drew for instructions on how to configure the AWS CLI.
 
+### Serverless CLI Setup
+* Execute command: `npm install serverless -g`
+
 ### Deploy Infrastructure
+* Install dependencies
+  * Execute command: `npm install`
 * Deploy to Beta
   * Execute command: `serverless deploy --stage beta`
 
@@ -22,6 +27,8 @@ See [here](https://github.com/AnomalyInnovations/serverless-nodejs-starter/blob/
       * `AWS_PROFILE=Discipleship serverless invoke local --stage beta --function getCourse --path tst/fixtures/get_course.json`
       * `AWS_PROFILE=Discipleship serverless invoke local --stage beta --function listCourses --path tst/fixtures/list_courses.json`
       * `AWS_PROFILE=Discipleship serverless invoke local --stage beta --function deleteCourse --path tst/fixtures/delete_course.json`
+  * Test all local functions:
+    * Execute command: `python integration_tests_local.py`
   * Test specific remote API in Beta:
     * Globally install `AWS API Gateway Test CLI`: `npm install -g aws-api-gateway-cli-test`
     * Example commands:

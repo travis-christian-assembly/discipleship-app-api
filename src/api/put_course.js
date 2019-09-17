@@ -39,6 +39,7 @@ export async function main(event, context, callback) {
     if (e.code == "ConditionalCheckFailedException") {
       return badRequest({ status: false, error: isCreate ? "Course with a same CourseId already exists." : "Encountered a conflict while attempting an update." });
     } else {
+      console.log(e);
       return failure({ status: false });
     }
   }
