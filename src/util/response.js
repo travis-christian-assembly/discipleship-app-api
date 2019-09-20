@@ -10,6 +10,10 @@ export function notFoundError(body) {
   return buildResponse(404, body);
 }
 
+export function conflictError(body) {
+  return buildResponse(409, body);
+}
+
 export function failure(body) {
   return buildResponse(500, body);
 }

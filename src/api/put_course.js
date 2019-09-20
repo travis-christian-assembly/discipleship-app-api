@@ -1,6 +1,6 @@
 import * as documents from "../dal/documents";
 import { logRequest } from "../util/request";
-import { success, badRequest, failure } from "../util/response";
+import { success, conflictError, failure } from "../util/response";
 
 export async function main(event, context, callback) {
   logRequest(event);
@@ -37,7 +37,7 @@ export async function main(event, context, callback) {
     return success(params.Item);
   } catch (e) {
     if (e.code == "ConditionalCheckFailedException") {
-      return badRequest({ status: false, error: isCreate ? "Course with a same CourseId already exists." : "Encountered a conflict while attempting an update." });
+      return conflictError({ status: false, error: isCreate ? "Course with a same CourseId already exists." : "Encountered a conflict while attempting an update." });
     } else {
       console.log(e);
       return failure({ status: false });

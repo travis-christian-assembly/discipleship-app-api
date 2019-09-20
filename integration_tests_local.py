@@ -26,9 +26,9 @@ def validate_response_from_console_output(console_output, expected_http_code):
             return expected_http_code in line
 
 test("success_put_course_create", "putCourse", "tst/fixtures/success_put_course_create.json", "200")
-test("failure_put_course_create_conflict", "putCourse", "tst/fixtures/success_put_course_create.json", "400")
+test("failure_put_course_create_conflict", "putCourse", "tst/fixtures/success_put_course_create.json", "409")
 test("success_put_course_update", "putCourse", "tst/fixtures/success_put_course_update.json", "200")
-test("failure_put_course_update_conflict", "putCourse", "tst/fixtures/success_put_course_update.json", "400")
+test("failure_put_course_update_conflict", "putCourse", "tst/fixtures/success_put_course_update.json", "409")
 test("success_get_course", "getCourse", "tst/fixtures/success_get_course.json", "200")
 test("success_list_courses", "listCourses", "tst/fixtures/success_list_courses.json", "200")
 test("success_delete_course", "deleteCourse", "tst/fixtures/success_delete_course.json", "200")
