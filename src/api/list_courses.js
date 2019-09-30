@@ -1,16 +1,22 @@
 import * as documents from "../dal/documents";
-import { logRequest } from "../util/request";
+import { logRequest, requireInputArgs } from "../util/request";
 import { success, failure } from "../util/response";
 
 export async function main(event, context) {
   logRequest(event);
 
+  const queryParams = event.queryStringParameters;
+  const inputError = requireInputArgs(["requestedBy"], queryParams);
+  if (inputError) {
+    return inputError;
+  }
+
   const params = {
     TableName: "Courses",
     IndexName: "ByCreators",
-    KeyConditionExpression: "CreatedBy = :userId",
+    KeyConditionExpression: "CreatedBy = :created_by",
     ExpressionAttributeValues: {
-      ":userId": event.requestContext.identity.cognitoIdentityId
+      ":created_by": queryParams.requestedBy
     }
   };
 

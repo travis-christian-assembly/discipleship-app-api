@@ -1,9 +1,15 @@
 import * as documents from "../dal/documents";
-import { logRequest } from "../util/request";
+import { logRequest, requireInputArgs } from "../util/request";
 import { success, notFoundError, failure } from "../util/response";
 
 export async function main(event, context) {
   logRequest(event);
+
+  const queryParams = event.queryStringParameters;
+  const inputError = requireInputArgs(["requestedBy"], queryParams);
+  if (inputError) {
+    return inputError;
+  }
 
   const params = {
     TableName: "Courses",
@@ -13,7 +19,7 @@ export async function main(event, context) {
     ConditionExpression:"CourseId = :courseId AND CreatedBy = :created_by",
     ExpressionAttributeValues: {
       ":courseId": event.pathParameters.courseId,
-      ":created_by": event.requestContext.identity.cognitoIdentityId
+      ":created_by": queryParams.requestedBy
     }
   };
 

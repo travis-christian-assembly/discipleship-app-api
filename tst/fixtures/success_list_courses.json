@@ -1,7 +1,5 @@
 {
-  "requestContext": {
-    "identity": {
-      "cognitoIdentityId": "USER-SUB-1234"
-    }
+  "queryStringParameters": {
+    "requestedBy": "owner_uuid"
   }
 }

@@ -1,21 +1,25 @@
 import * as documents from "../dal/documents";
-import { logRequest } from "../util/request";
+import { logRequest, requireInputArgs } from "../util/request";
 import { success, conflictError, failure } from "../util/response";
 
 export async function main(event, context, callback) {
   logRequest(event);
 
   const data = JSON.parse(event.body);
+  const inputError = requireInputArgs(["requestedBy"], data);
+  if (inputError) {
+    return inputError;
+  }
 
   // If `revisionToUpdateFrom` is specified, perform an UPDATE, otherwise, perform a CREATE.
-  const isCreate = data.revisionToUpdateFrom == null;
+  var isCreate = data.revisionToUpdateFrom == null;
 
   const params = {
     TableName: "Courses",
     Item: {
       CourseId: event.pathParameters.courseId,
       LastTouchedAt: Date.now(),
-      CreatedBy: event.requestContext.identity.cognitoIdentityId,
+      CreatedBy: data.requestedBy,
       Description: data.description
     }
   };
@@ -27,7 +31,7 @@ export async function main(event, context, callback) {
     params.Item.Revision = data.revisionToUpdateFrom + 1;
     params.ConditionExpression = "attribute_exists(CourseId) AND CreatedBy = :created_by AND Revision = :revision_to_update_from";
     params.ExpressionAttributeValues = {
-      ":created_by": event.requestContext.identity.cognitoIdentityId,
+      ":created_by": data.requestedBy,
       ":revision_to_update_from": data.revisionToUpdateFrom
     };
   }

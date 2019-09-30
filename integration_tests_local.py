@@ -22,9 +22,11 @@ def read_file_content(file_path):
 
 def validate_response_from_console_output(console_output, expected_http_code):
     for line in console_output.splitlines():
-        if "statusCode" in line:
+        if "\"statusCode\"" in line:
             return expected_http_code in line
 
+test("failure_put_course_create_no_requester", "putCourse", "tst/fixtures/failure_put_course_create_no_requester.json", "400")
+test("failure_delete_course_no_requester", "deleteCourse", "tst/fixtures/failure_delete_course_no_requester.json", "400")
 test("success_put_course_create", "putCourse", "tst/fixtures/success_put_course_create.json", "200")
 test("failure_put_course_create_conflict", "putCourse", "tst/fixtures/success_put_course_create.json", "409")
 test("success_put_course_update", "putCourse", "tst/fixtures/success_put_course_update.json", "200")
